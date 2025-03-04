@@ -1,0 +1,12 @@
+{
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "diffEditor.ignoreTrimWhitespace": false,
+        "editor.formatOnType": true,
+    },
+    "black-formatter.args": [
+        "--line-length",
+        "120"
+    ],
+    "python.analysis.typeCheckingMode": "standard",
+}
