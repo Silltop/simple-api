@@ -1,0 +1,32 @@
+services:
+  ip-fetch-app:
+    build:
+      context: .
+      dockerfile: app.Dockerfile
+    deploy:
+      replicas: 1
+    volumes:
+      - ./:/opt/simple-api
+    ports:
+      - "6622:6622"
+    environment:
+      - DATABASE_URL=postgresql://simpleapi:simpleapi@db:5432/simpleapi
+
+  db:
+    image: postgres
+    restart: always
+    shm_size: 128mb
+    volumes:
+      - ./.pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: simpleapi
+      POSTGRES_PASSWORD: simpleapi
+      POSTGRES_DB: simpleapi
+    ports:
+      - "5432:5432"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
