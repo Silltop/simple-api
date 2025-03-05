@@ -9,4 +9,5 @@
         "120"
     ],
     "python.analysis.typeCheckingMode": "standard",
+    "http.client": {}
 }

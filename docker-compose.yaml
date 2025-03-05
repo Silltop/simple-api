@@ -11,13 +11,13 @@ services:
       - "6622:6622"
     environment:
       - DATABASE_URL=postgresql://simpleapi:simpleapi@db:5432/simpleapi
+      - IPSTACK_API_KEY=your secret key here
+      - DNS_SERVERS=8.8.8.8
 
   db:
     image: postgres
     restart: always
     shm_size: 128mb
-    volumes:
-      - ./.pgdata:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: simpleapi
       POSTGRES_PASSWORD: simpleapi
