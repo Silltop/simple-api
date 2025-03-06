@@ -1,24 +1,26 @@
-import pytest
-from validators import is_valid_ip, dns_resolve_ip, is_valid_url
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
+
 import dns.resolver
+import pytest
+
+from validators import dns_resolve_ip, is_valid_ip, is_valid_url
 
 
 def test_valid_ip():
-    assert is_valid_ip("81.41.222.0") == True
-    assert is_valid_ip("127.0.0.1") == False
-    assert is_valid_ip("hellothere") == False
-    assert is_valid_ip("-1.0.2.3") == False
-    assert is_valid_ip("0.0.0.0") == False
-    assert is_valid_ip("255.255.255.255") == False
-    assert is_valid_ip("") == False
-    assert is_valid_ip(" 192.168.0.1 ") == False
+    assert is_valid_ip("81.41.222.0") is True
+    assert is_valid_ip("127.0.0.1") is False
+    assert is_valid_ip("hellothere") is False
+    assert is_valid_ip("-1.0.2.3") is False
+    assert is_valid_ip("0.0.0.0") is False
+    assert is_valid_ip("255.255.255.255") is False
+    assert is_valid_ip("") is False
+    assert is_valid_ip(" 192.168.0.1 ") is False
 
 
 def test_valid_url():
-    assert is_valid_url("http://example.com") == True
-    assert is_valid_url("google.com") == True
-    assert is_valid_url("http://") == False
+    assert is_valid_url("http://example.com") is True
+    assert is_valid_url("google.com") is True
+    assert is_valid_url("http://") is False
 
 
 @patch("dns.resolver.Resolver")
@@ -43,4 +45,4 @@ def test_dns_timeout(mock_resolver):
     mock_resolver.return_value.resolve.side_effect = dns.resolver.Timeout
     with pytest.raises(Exception) as context:
         dns_resolve_ip("timeout.com")
-    assert "The resolution lifetime expired" in str(context.value)
+    assert "Unable to resolve domain" in str(context.value)

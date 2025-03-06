@@ -2,7 +2,7 @@ from logging.config import dictConfig
 
 import logging
 from log_config import logging_config
-from flask_config import app, override_flask_exceptions
+from flask_config import override_flask_exceptions
 from api import app, db
 from routes import v1
 from sqlalchemy.exc import OperationalError

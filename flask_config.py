@@ -1,7 +1,6 @@
 import json
 import logging
-from typing import Type
-from werkzeug.exceptions import default_exceptions, HTTPException
+from werkzeug.exceptions import default_exceptions
 from api import app
 
 

@@ -2,6 +2,7 @@ import ipaddress
 import logging
 import os
 from typing import Optional
+
 import dns.resolver
 from flask import abort
 from urllib3.util import parse_url
@@ -34,10 +35,16 @@ def dns_resolve_ip(domain: str) -> str:
     resolver = dns.resolver.Resolver()
     resolver.nameservers = os.getenv("DNS_SERVERS", "8.8.8.8").split(",")
     try:
-        return str(resolver.resolve(domain, "A")[0])
+        answer = resolver.resolve(domain, "A")
+        if answer:
+            return str(answer[0])
+        else:
+            abort(404, description="No A record found for domain")
     except dns.resolver.NXDOMAIN:
         abort(404, description="Domain not found in DNS")
     except dns.resolver.NoAnswer:
         abort(404, description="No A record found for domain")
-    except dns.resolver.NoNameservers or dns.resolver.Timeout:
+    except dns.resolver.NoNameservers:
+        abort(500, description="Unable to resolve domain")
+    except dns.resolver.Timeout:
         abort(500, description="Unable to resolve domain")

@@ -1,10 +1,12 @@
 import logging
-from sqlite3 import OperationalError, DatabaseError
+import traceback
+from sqlite3 import DatabaseError, OperationalError
 from typing import Optional
 
 from flask import abort
+
+from api import app, db
 from models import GeolocationModel
-from api import db, app
 
 
 def handle_db_errors(func):
@@ -21,12 +23,14 @@ def handle_db_errors(func):
 
         except Exception as e:
             logging.error(f"Unexpected error occurred: {e}")
+            traceback.print_exc()
             abort(500, "Internal server error.")
 
     return wrapper
 
 
 def add_result_to_db(result: dict) -> None:
+    print(result)
     existing_entry = GeolocationModel.query.filter_by(
         ip=result["ip"],
         hostname=result["hostname"],
@@ -69,4 +73,4 @@ def get_results_from_db(ips: list) -> Optional[list]:
     with app.app_context():
         for ip in ips:
             entries = GeolocationModel.query.filter_by(ip=ip).all()
-            return entries
+            return [entry.to_dict() for entry in entries]

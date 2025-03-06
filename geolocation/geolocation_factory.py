@@ -1,5 +1,3 @@
-from typing import Optional
-from flask import abort
 from geolocation.providers.ipstack import IPStackController
 
 

@@ -1,9 +1,9 @@
 import json
-import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 import requests
+
 from geolocation.providers.ipstack import IPStackController
 
 

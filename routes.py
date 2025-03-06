@@ -1,9 +1,9 @@
-from flask import jsonify
-from api import app
-from flask import Blueprint, request
+from flask import Blueprint, abort, jsonify, request
+
 import db_ops
+from api import app
 from geolocation import geolocation_factory
-from validators import *
+from validators import dns_resolve_ip, is_valid_ip, is_valid_url
 
 v1 = Blueprint("v1", __name__, url_prefix="/v1")
 geolocation_controller = geolocation_factory.GeolocationApiFactory()
@@ -21,8 +21,6 @@ def api_index():
 
 
 # Assuming that the operations should be done in bulk
-
-
 @v1.route("/geolocation/add", methods=["POST"])
 def add():
     request_data = request.get_json()
@@ -39,14 +37,16 @@ def add():
 @v1.route("/geolocation/delete", methods=["DELETE"])
 def delete():
     db_ops.delete_result_from_db(request.get_json().get("ips", []))
-    return jsonify({"status": "ok"}), 200
+    return jsonify({"status": "records removed"}), 200
 
 
 @v1.route("/geolocation/get", methods=["GET", "POST"])
 def get():
     if request.method == "GET":
         ip = request.args.get("ip", [])
-        return jsonify(db_ops.get_results_from_db([ip])), 200
+        db_data = db_ops.get_results_from_db([ip])
+        json_data = jsonify(db_data)
+        return json_data, 200
     elif request.method == "POST":
         request_data = request.get_json()
         db_data = db_ops.get_results_from_db(request_data.get("ips", []))
