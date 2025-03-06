@@ -100,7 +100,7 @@ curl -X GET "http://localhost:6622/v1/geolocation/get?ip=62.33.12.56" \
      -H "Content-Type: application/json"
 ```
 
-Get in bulk
+#### Get in bulk
 ```
 POST /v1/geolocation/add
 ```
@@ -135,6 +135,6 @@ Curl command
 curl -X DELETE http://localhost:6622/v1/geolocation/delete \
      -H "Content-Type: application/json" \
      -d '{
-           "ips": ["192.168.1.1", "10.0.0.1"]
+           "ips": ["62.33.12.56", "10.0.0.1"]
          }'
 ```
